@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+﻿using Gerenciador.Context;
+using Gerenciador.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Gerenciador.Controllers
 {
@@ -8,35 +9,82 @@ namespace Gerenciador.Controllers
     [ApiController]
     public class ProductController : ControllerBase
     {
+
+        private readonly ManagementContext _managementContext;
+        
+        public ProductController(ManagementContext managementContext)
+        {
+            _managementContext = managementContext;
+        }
+
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<ActionResult> GetAll()
         {
-            return new string[] { "value1", "value2" };
+            var products = await _managementContext.Products.ToListAsync();
+
+            return Ok(products);
         }
 
-        // GET api/<ProductController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<ActionResult> GetById(int id)
         {
-            return "value";
+           var productById = _managementContext.Products.Where(prod => prod.Id == id).FirstOrDefault();
+            if(productById == null)
+            {
+                return NotFound("Product not found.");
+            }
+
+            return Ok(productById);
         }
 
-        // POST api/<ProductController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<ActionResult> Post([FromBody] Product product)
         {
+            if(product == null)
+            {
+                return BadRequest("The product is null");
+            }
+
+            _managementContext.Products.Add(product);
+
+            await _managementContext.SaveChangesAsync();
+
+            return Ok(product);
         }
 
-        // PUT api/<ProductController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<ActionResult> Put(int id, [FromBody] Product prod)
         {
+            var product = _managementContext.Products.FirstOrDefault(p => p.Id == id);
+
+            if(product == null)
+            {
+                return NotFound();
+            }
+
+            product.Name = prod.Name;
+            product.Description = prod.Description;
+            product.Price = prod.Price;
+            product.Stock = prod.Stock;
+
+            await _managementContext.SaveChangesAsync();
+            return Ok(product);
         }
 
-        // DELETE api/<ProductController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
+            var prod = _managementContext.Products.FirstOrDefault(x => x.Id == id);
+
+            if(prod == null)
+            {
+                return NotFound("Product not found");
+            }
+            _managementContext.Products.Remove(prod);
+
+            await _managementContext.SaveChangesAsync();
+
+            return Ok(prod);
         }
     }
 }

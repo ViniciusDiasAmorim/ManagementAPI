@@ -9,9 +9,9 @@ namespace Gerenciador.Context
         {
         }
 
-        DbSet<Order> Orders { get; set; }
-        DbSet<User> Users { get; set; }
-        DbSet<Product> Products { get; set; }
-        DbSet<OrderItems> OrderItems { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<OrderItems> OrderItems { get; set; }
     }
 }
