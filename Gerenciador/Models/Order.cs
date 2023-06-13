@@ -4,6 +4,6 @@
     {
         public Guid Id { get; set; }
         public User User { get; set; }
-        List<Product> Products { get; set; }
+        List<OrderItems> OrderItems { get; set; }
     }
 }

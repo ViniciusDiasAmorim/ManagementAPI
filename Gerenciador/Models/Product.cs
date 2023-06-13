@@ -15,7 +15,7 @@ namespace Gerenciador.Models
         public string Description { get; set; }
         [Required(ErrorMessage = "The price field needs to be filled in.")]
         [Column(TypeName = "decimal(10,2)")]
-        public double Price { get; set; }
+        public decimal Price { get; set; }
         public int Stock { get; set; }
     }
 }
