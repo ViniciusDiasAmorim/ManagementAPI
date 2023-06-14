@@ -1,4 +1,6 @@
 using Gerenciador.Context;
+using Gerenciador.Repositories;
+using Gerenciador.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace Gerenciador
@@ -13,7 +15,7 @@ namespace Gerenciador
             string mySqlConnection = builder.Configuration.GetConnectionString("DefaultConnection");
 
             builder.Services.AddDbContext<ManagementContext>(opt => opt.UseMySql(mySqlConnection, ServerVersion.AutoDetect(mySqlConnection)));
-
+            builder.Services.AddScoped<IProductRepository, ProductRepository>();
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();

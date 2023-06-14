@@ -1,5 +1,6 @@
 ﻿using Gerenciador.Context;
 using Gerenciador.Models;
+using Gerenciador.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,18 +10,18 @@ namespace Gerenciador.Controllers
     [ApiController]
     public class ProductController : ControllerBase
     {
-
         private readonly ManagementContext _managementContext;
-        
-        public ProductController(ManagementContext managementContext)
+        private readonly IProductRepository _produtoRepository;
+        public ProductController(ManagementContext managementContext, IProductRepository productRepository)
         {
             _managementContext = managementContext;
+            _produtoRepository = productRepository;
         }
 
         [HttpGet]
         public async Task<ActionResult> GetAll()
         {
-            var products = await _managementContext.Products.ToListAsync();
+            var products = await _produtoRepository.ProductsGetAll();
 
             return Ok(products);
         }
@@ -28,8 +29,9 @@ namespace Gerenciador.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult> GetById(int id)
         {
-           var productById = _managementContext.Products.Where(prod => prod.Id == id).FirstOrDefault();
-            if(productById == null)
+            var productById = await _produtoRepository.GetProductById(id);
+
+            if (productById == null)
             {
                 return NotFound("Product not found.");
             }
@@ -40,14 +42,17 @@ namespace Gerenciador.Controllers
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] Product product)
         {
-            if(product == null)
+            if (product == null)
             {
                 return BadRequest("The product is null");
             }
 
-            _managementContext.Products.Add(product);
+            bool result = await _produtoRepository.Post(product);
 
-            await _managementContext.SaveChangesAsync();
+            if (!result)
+            {
+                return BadRequest("Past properties are invalid");
+            }
 
             return Ok(product);
         }
@@ -55,36 +60,26 @@ namespace Gerenciador.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult> Put(int id, [FromBody] Product prod)
         {
-            var product = _managementContext.Products.FirstOrDefault(p => p.Id == id);
+            var product = await _produtoRepository.Put(prod, id);
 
-            if(product == null)
+            if (!product)
             {
-                return NotFound();
+                return BadRequest("Past properties are invalid");
             }
-
-            product.Name = prod.Name;
-            product.Description = prod.Description;
-            product.Price = prod.Price;
-            product.Stock = prod.Stock;
-
-            await _managementContext.SaveChangesAsync();
-            return Ok(product);
+            return Ok(prod);
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
-            var prod = _managementContext.Products.FirstOrDefault(x => x.Id == id);
+           var produto = await _produtoRepository.Delete(id);
 
-            if(prod == null)
+            if (produto == null)
             {
-                return NotFound("Product not found");
+                return NotFound("Product not found.");
             }
-            _managementContext.Products.Remove(prod);
 
-            await _managementContext.SaveChangesAsync();
-
-            return Ok(prod);
+            return Ok(produto);
         }
     }
 }
