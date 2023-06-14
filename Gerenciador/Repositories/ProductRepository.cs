@@ -24,61 +24,49 @@ namespace Gerenciador.Repositories
         {
             var productById = await _context.Products.Where(prod => prod.Id == id).FirstOrDefaultAsync();
 
-            return  productById;
+            return productById;
         }
         public async Task<bool> Post(Product product)
         {
-            var validationResults = new List<ValidationResult>();
 
-            var validationContext = new ValidationContext(product);
+            bool isValid = Validation(product);
 
-            if (!Validator.TryValidateObject(product, validationContext, validationResults))
+            if(!isValid)
             {
-                foreach (var validationResult in validationResults)
-                {
-                    Console.WriteLine(validationResult.ErrorMessage);
-                }
-
                 return false;
             }
-            else
-            {
-                _context.Products.Add(product);
 
-                await _context.SaveChangesAsync();
+            _context.Products.Add(product);
 
-                return true;
-            }
+            await _context.SaveChangesAsync();
+
+            return true;
         }
 
         public async Task<bool> Put(Product product, int id)
         {
             var productAfterChange = _context.Products.Where(p => p.Id == id).FirstOrDefault();
 
+            if (product == null)
+            {
+                return false;
+            }
+
             productAfterChange.Name = product.Name;
             productAfterChange.Description = product.Description;
             productAfterChange.Price = product.Price;
             productAfterChange.Stock = product.Stock;
 
-            var validationResults = new List<ValidationResult>();
+            bool isValid = Validation(productAfterChange);
 
-            var validationContext = new ValidationContext(product);
-
-            if (!Validator.TryValidateObject(product, validationContext, validationResults))
+            if (!isValid)
             {
-                foreach (var validationResult in validationResults)
-                {
-                    Console.WriteLine(validationResult.ErrorMessage);
-                }
-
                 return false;
             }
-            else
-            {
-                await _context.SaveChangesAsync();
+            
+            await _context.SaveChangesAsync();
 
-                return true;
-            }
+            return true;
         }
         public async Task<Product> Delete(int id)
         {
@@ -93,6 +81,26 @@ namespace Gerenciador.Repositories
                 return produto;
             }
             return null;
+        }
+
+        public bool Validation(Product product)
+        {
+
+            var validationResults = new List<ValidationResult>();
+
+            var validationContext = new ValidationContext(product);
+
+            if (!Validator.TryValidateObject(product, validationContext, validationResults))
+            {
+                foreach (var validationResult in validationResults)
+                {
+                    Console.WriteLine(validationResult.ErrorMessage);
+                }
+
+                return false;
+            }
+
+            return true;
         }
     }
 }
