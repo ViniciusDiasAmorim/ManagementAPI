@@ -1,8 +1,6 @@
-﻿using Gerenciador.Context;
-using Gerenciador.Models;
+﻿using Gerenciador.Models;
 using Gerenciador.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Gerenciador.Controllers
 {
@@ -10,11 +8,9 @@ namespace Gerenciador.Controllers
     [ApiController]
     public class ProductController : ControllerBase
     {
-        private readonly ManagementContext _managementContext;
         private readonly IProductRepository _produtoRepository;
-        public ProductController(ManagementContext managementContext, IProductRepository productRepository)
+        public ProductController(IProductRepository productRepository)
         {
-            _managementContext = managementContext;
             _produtoRepository = productRepository;
         }
 
@@ -47,14 +43,14 @@ namespace Gerenciador.Controllers
                 return BadRequest("The product is null");
             }
 
-            bool result = await _produtoRepository.Post(product);
+            var produtctChange = await _produtoRepository.Post(product);
 
-            if (!result)
+            if (produtctChange == null)
             {
                 return BadRequest("Past properties are invalid");
             }
 
-            return Ok(product);
+            return Ok(produtctChange);
         }
 
         [HttpPut("{id}")]
@@ -62,10 +58,11 @@ namespace Gerenciador.Controllers
         {
             var product = await _produtoRepository.Put(prod, id);
 
-            if (!product)
+            if (product == null)
             {
                 return BadRequest("Past properties are invalid");
             }
+
             return Ok(prod);
         }
 

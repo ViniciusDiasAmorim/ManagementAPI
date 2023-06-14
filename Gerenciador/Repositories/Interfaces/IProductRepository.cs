@@ -6,8 +6,8 @@ namespace Gerenciador.Repositories.Interfaces
     {
         Task<List<Product>> ProductsGetAll();
         Task<Product> GetProductById(int id);
-        Task<bool> Post(Product product);
-        Task <bool> Put(Product product, int id);
+        Task<Product> Post(Product product);
+        Task <Product> Put(Product product, int id);
         Task<Product> Delete(int id);
     }
 }

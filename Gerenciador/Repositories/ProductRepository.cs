@@ -22,51 +22,50 @@ namespace Gerenciador.Repositories
         }
         public async Task<Product> GetProductById(int id)
         {
-            var productById = await _context.Products.Where(prod => prod.Id == id).FirstOrDefaultAsync();
+            var productById = await _context.Products.FirstOrDefaultAsync(prod => prod.Id == id);
 
             return productById;
         }
-        public async Task<bool> Post(Product product)
+        public async Task<Product> Post(Product product)
         {
-
             bool isValid = Validation(product);
 
-            if(!isValid)
+            if (!isValid)
             {
-                return false;
+                return null;
             }
 
             _context.Products.Add(product);
 
             await _context.SaveChangesAsync();
 
-            return true;
+            return product;
         }
 
-        public async Task<bool> Put(Product product, int id)
+        public async Task<Product> Put(Product product, int id)
         {
-            var productAfterChange = _context.Products.Where(p => p.Id == id).FirstOrDefault();
+            var productChange = _context.Products.Where(p => p.Id == id).FirstOrDefault();
 
-            if (product == null)
+            if (productChange == null)
             {
-                return false;
+                return null;
             }
 
-            productAfterChange.Name = product.Name;
-            productAfterChange.Description = product.Description;
-            productAfterChange.Price = product.Price;
-            productAfterChange.Stock = product.Stock;
+            productChange.Name = product.Name;
+            productChange.Description = product.Description;
+            productChange.Price = product.Price;
+            productChange.Stock = product.Stock;
 
-            bool isValid = Validation(productAfterChange);
+            bool isValid = Validation(productChange);
 
             if (!isValid)
             {
-                return false;
+                return null;
             }
-            
+
             await _context.SaveChangesAsync();
 
-            return true;
+            return productChange;
         }
         public async Task<Product> Delete(int id)
         {
