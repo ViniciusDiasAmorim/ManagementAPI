@@ -35,6 +35,19 @@ namespace Gerenciador.Controllers
             return Ok(user);
         }
 
+        [HttpGet("search/{queryString}")]
+        public async Task<ActionResult> GetByName(string queryString)
+        {
+            var users = await _userRepository.GetByName(queryString.ToLower());
+
+            if (users == null)
+            {
+                return NotFound("User not found.");
+            }
+
+            return Ok(users);
+        }
+
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] User user)
         {

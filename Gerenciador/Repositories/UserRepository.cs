@@ -13,7 +13,7 @@ namespace Gerenciador.Repositories
         {
             _context = context;
         }
-
+        
         public async Task<List<User>> GetAll()
         {
             var users = await _context.Users.ToListAsync();
@@ -28,11 +28,11 @@ namespace Gerenciador.Repositories
             return user;
         }
 
-        public async Task<User> GetByName(string name)
+        public async Task<List<User>> GetByName(string name)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(user => user.Name.Contains(name));
+            var users = await _context.Users.Where(u => u.Name.ToLower().Contains(name)).ToListAsync();
 
-            return user;
+            return users;
         }
 
         public async Task<User> Post(User user)
