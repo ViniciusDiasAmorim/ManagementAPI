@@ -16,6 +16,6 @@ namespace Gerenciador.Models
         public string Email { get; set; }
         public string Password { get; set; }
         [ValidateNever]
-        public List<Order> Orders { get; set; }
+        public List<Order> Orders { get; set; } = new List<Order>();
     }
 }
