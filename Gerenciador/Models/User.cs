@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
-using Newtonsoft.Json;
 
 namespace Gerenciador.Models
 {
@@ -16,6 +16,7 @@ namespace Gerenciador.Models
         public string Email { get; set; }
         public string Password { get; set; }
         [ValidateNever]
-        public List<Order> Orders { get; set; } = new List<Order>();
+        [JsonIgnore]
+        public virtual List<Order> Orders { get; set; }
     }
 }

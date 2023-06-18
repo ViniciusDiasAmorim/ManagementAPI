@@ -1,6 +1,7 @@
 ﻿using Gerenciador.Context;
 using Gerenciador.DTO;
 using Gerenciador.Models;
+using Gerenciador.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,46 +11,16 @@ namespace Gerenciador.Controllers
     [ApiController]
     public class OrderController : ControllerBase
     {
-        private readonly ManagementContext _managementContext;
-        public OrderController(ManagementContext managementContext)
+        private readonly IOrderRepository _orderReposirory;
+        public OrderController(IOrderRepository orderRepository)
         {
-            _managementContext = managementContext;
+            _orderReposirory = orderRepository;
         }
 
         [HttpPost]
         public async Task<ActionResult> CreateOrder([FromBody] CreateOrderDTO createOrderDTO)
         {
-            var user = await _managementContext.Users.FirstOrDefaultAsync(u => u.Id == createOrderDTO.UserId);
-            
-            if (user == null)
-            {
-                return BadRequest("User not found");
-            }
-
-            Order order = new Order();
-            
-     
-            foreach (var item in createOrderDTO.orderItemDTOs)
-            {
-                var product = await _managementContext.Products.FirstOrDefaultAsync(p => p.Id == item.ProductId);
-
-                if (product == null)
-                {
-                    return BadRequest("User not found");
-                }
-
-                var itemProduct = new OrderItems()
-                {
-                    OrderId = order.Id,
-                    ProductId = product.Id,
-                    Amount = item.Amount
-                };
-
-                order.OrderItems.Add(itemProduct);
-            }
-
-            order.User = user;
-
+            var order = await _orderReposirory.CreateOrder(createOrderDTO);
             return Ok(order);
         }
     }

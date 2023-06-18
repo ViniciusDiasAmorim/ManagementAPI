@@ -1,6 +1,11 @@
-﻿namespace Gerenciador.Repositories.Interfaces
+﻿using Gerenciador.Context;
+using Gerenciador.DTO;
+using Gerenciador.Models;
+
+namespace Gerenciador.Repositories.Interfaces
 {
-    public class IOrderRepository
+    public interface IOrderRepository
     {
+        Task<Order> CreateOrder(CreateOrderDTO createOrderDTO);
     }
 }

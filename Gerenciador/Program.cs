@@ -17,6 +17,7 @@ namespace Gerenciador
             builder.Services.AddDbContext<ManagementContext>(opt => opt.UseMySql(mySqlConnection, ServerVersion.AutoDetect(mySqlConnection)));
             builder.Services.AddScoped<IProductRepository, ProductRepository>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 
 
             builder.Services.AddControllers();
