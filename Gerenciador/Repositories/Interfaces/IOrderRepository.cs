@@ -6,6 +6,7 @@ namespace Gerenciador.Repositories.Interfaces
 {
     public interface IOrderRepository
     {
-        Task<Order> CreateOrder(CreateOrderDTO createOrderDTO);
+        Task<Order> CreateOrder(User user, Dictionary<Product, int> products);
+
     }
 }

@@ -13,37 +13,25 @@ namespace Gerenciador.Repositories
         {
             _context = context;
         }
-        public async Task<Order> CreateOrder(CreateOrderDTO createOrderDTO)
+        public async Task<Order> CreateOrder(User user, Dictionary<Product, int> products)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == createOrderDTO.UserId);
-
-            if (user == null)
-            {
-                return null;
-            }
-
             Order order = new Order();
 
             order.User = user;
 
-
-            foreach (var item in createOrderDTO.orderItemDTOs)
+            foreach (var item in products)
             {
-                var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == item.ProductId);
-
-                if (product == null)
-                {
-                    return null;
-                }
-
                 var itemProduct = new OrderItems()
                 {
                     OrderId = order.Id,
-                    ProductId = product.Id,
-                    Amount = item.Amount
+                    ProductId = item.Key.Id,
+                    Amount = item.Value
                 };
 
                 order.OrderItems.Add(itemProduct);
+
+                var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == item.Key.Id);
+                product.Stock -= item.Value;
             }
 
             _context.Orders.Add(order);
