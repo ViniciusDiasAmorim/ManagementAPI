@@ -52,10 +52,7 @@ C:\Users\User\Desktop\Gerenciador\Gerenciador\bin\Debug\net6.0\System.CodeDom.dl
 C:\Users\User\Desktop\Gerenciador\Gerenciador\bin\Debug\net6.0\System.Text.Encodings.Web.dll
 C:\Users\User\Desktop\Gerenciador\Gerenciador\bin\Debug\net6.0\System.Text.Json.dll
 C:\Users\User\Desktop\Gerenciador\Gerenciador\bin\Debug\net6.0\runtimes\browser\lib\net6.0\System.Text.Encodings.Web.dll
-C:\Users\User\Desktop\Gerenciador\Gerenciador\bin\Debug\net6.0\System.Net.Http.Formatting.dll
-C:\Users\User\Desktop\Gerenciador\Gerenciador\bin\Debug\net6.0\System.Web.Http.dll
 C:\Users\User\Desktop\Gerenciador\Gerenciador\bin\Debug\net6.0\Newtonsoft.Json.dll
-C:\Users\User\Desktop\Gerenciador\Gerenciador\bin\Debug\net6.0\Newtonsoft.Json.Bson.dll
 C:\Users\User\Desktop\Gerenciador\Gerenciador\bin\Debug\net6.0\MessagePack.dll
 C:\Users\User\Desktop\Gerenciador\Gerenciador\bin\Debug\net6.0\MessagePack.Annotations.dll
 C:\Users\User\Desktop\Gerenciador\Gerenciador\bin\Debug\net6.0\Microsoft.AspNetCore.Razor.Language.dll
