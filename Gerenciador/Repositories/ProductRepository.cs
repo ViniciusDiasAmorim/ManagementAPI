@@ -3,7 +3,6 @@ using Gerenciador.Models;
 using Gerenciador.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
-using System.Web.Http.Results;
 
 namespace Gerenciador.Repositories
 {

@@ -1,6 +1,6 @@
 ﻿using Gerenciador.Context;
-using Gerenciador.DTO;
 using Gerenciador.Models;
+using Gerenciador.Models.Enums;
 using Gerenciador.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,6 +12,11 @@ namespace Gerenciador.Repositories
         public OrderRepository(ManagementContext context)
         {
             _context = context;
+        }
+
+        public async Task<IEnumerable<Order>> GetOrdersByUserID(int id)
+        {
+            return await _context.Orders.Where(u => u.User.Id == id).Include(i => i.OrderItems).ToListAsync();
         }
         public async Task<Order> CreateOrder(User user, Dictionary<Product, int> products)
         {
@@ -39,6 +44,21 @@ namespace Gerenciador.Repositories
             await _context.SaveChangesAsync();
 
             return order;
+        }
+
+        public async Task<bool> DeliveryOrder(Guid orderID)
+        {
+            var order = await _context.Orders.FirstOrDefaultAsync(o => o.Id  == orderID);
+            if(order == null)
+            {
+                return false;
+            }
+
+            order.Status = OrderStatus.Delivered;
+
+            await _context.SaveChangesAsync();
+
+            return true;
         }
     }
 }

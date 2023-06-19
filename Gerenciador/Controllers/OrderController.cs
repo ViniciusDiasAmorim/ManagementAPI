@@ -1,9 +1,7 @@
-﻿using Gerenciador.Context;
-using Gerenciador.DTO;
+﻿using Gerenciador.DTO;
 using Gerenciador.Models;
 using Gerenciador.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Gerenciador.Controllers
 {
@@ -21,6 +19,20 @@ namespace Gerenciador.Controllers
             _userRepository = userRepository;
         }
 
+        [HttpGet("{id}")]
+        public async Task<ActionResult> GetOrderByUserId(int id)
+        {
+            var user = await _userRepository.GetById(id);
+            
+            if (user == null)
+            {
+                return BadRequest();
+            }
+
+            IEnumerable<Order> userOrders = await _orderRepository.GetOrdersByUserID(id);
+
+            return Ok(userOrders);
+        }
         [HttpPost]
         public async Task<ActionResult> CreateOrder([FromBody] CreateOrderDTO createOrderDTO)
         {
@@ -37,7 +49,7 @@ namespace Gerenciador.Controllers
                 var product = await _productRepository.GetProductById(item.ProductId);
                 if (product == null)
                 {
-                    return NotFound($"Product with name {product.Name} not found");
+                    return NotFound($"Product not found");
                 }
                 if (product.Stock - item.Amount < 0)
                 {
@@ -54,6 +66,18 @@ namespace Gerenciador.Controllers
             }
 
             return Ok(order);
+        }
+        [HttpPut]
+        public async Task<ActionResult> DeliveryOrder(Guid id)
+        {
+            bool changeIsSucess = await _orderRepository.DeliveryOrder(id);
+
+            if(!changeIsSucess)
+            {
+                return NotFound();
+            }
+
+            return Ok("Delivery is successuful");
         }
     }
 }
