@@ -1,7 +1,6 @@
 # ManagementAPI
 
-
-## O Gerenciador é um sistema de gerenciamento de usuários e pedidos. Ele permite criar, visualizar, atualizar e excluir usuários, bem como realizar pedidos, adicionar produtos aos pedidos e alterar o status dos pedidos.
+#### O Gerenciador é um sistema de gerenciamento de usuários e pedidos. Ele permite criar, visualizar, atualizar e excluir usuários, bem como realizar pedidos, adicionar produtos aos pedidos e alterar o status dos pedidos.
 
 ## Tecnologias utilizadas
 - ASP.NET Core
@@ -35,3 +34,8 @@
 - GET /api/order/{id} - Obtém os pedidos de um usuário por ID.
 - POST /api/order - Cria um novo pedido associado a um usuário.
 - PUT /api/order - Altera o status de entrega de um pedido.
+## Autenticação
+Funcionalidade de autenticação por meio do JWT (JSON Web Token). É necessário autenticar-se antes de acessar os endpoints protegidos.
+
+### Endpoints de Autenticação
+- POST /auth/login - Realiza o login do usuário e retorna um token JWT válido.
