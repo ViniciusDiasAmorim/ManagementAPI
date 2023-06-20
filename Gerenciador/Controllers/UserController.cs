@@ -1,5 +1,6 @@
 ﻿using Gerenciador.Models;
 using Gerenciador.Repositories.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Gerenciador.Controllers
@@ -14,6 +15,7 @@ namespace Gerenciador.Controllers
             _userRepository = userRepository;
         }
 
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpGet]
         public async Task<ActionResult> GetAll()
         {
@@ -21,7 +23,7 @@ namespace Gerenciador.Controllers
             
             return Ok(users); 
         }
-
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpGet("{id}")]
         public async Task<ActionResult> Get(int id)
         {
@@ -34,7 +36,7 @@ namespace Gerenciador.Controllers
 
             return Ok(user);
         }
-
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpGet("search/{queryString}")]
         public async Task<ActionResult> GetByName(string queryString)
         {
@@ -60,7 +62,7 @@ namespace Gerenciador.Controllers
 
             return Ok(newUser);
         }
-
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpPut("{id}")]
         public async Task<ActionResult> Put(int id, [FromBody] User user)
         {
@@ -73,7 +75,7 @@ namespace Gerenciador.Controllers
 
             return Ok(userChange);
         }
-
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {

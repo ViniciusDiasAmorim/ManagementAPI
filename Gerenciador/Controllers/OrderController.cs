@@ -1,6 +1,7 @@
 ﻿using Gerenciador.DTO;
 using Gerenciador.Models;
 using Gerenciador.Repositories.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Gerenciador.Controllers
@@ -67,6 +68,7 @@ namespace Gerenciador.Controllers
 
             return Ok(order);
         }
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpPut]
         public async Task<ActionResult> DeliveryOrder(Guid id)
         {
