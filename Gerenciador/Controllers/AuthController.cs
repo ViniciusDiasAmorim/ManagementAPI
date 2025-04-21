@@ -21,8 +21,6 @@ public class AuthController : ControllerBase
     [HttpPost("login")]
     public IActionResult Login([FromBody] LoginDTO userDTO)
     {
-        // Aqui você deve fazer a autenticação do usuário
-        // Exemplo simplificado: Verifica se o usuário e senha são iguais a "admin"
         if (userDTO.UserName == "admin" && userDTO.Password == "admin")
         {
             var token = GenerateJwtToken(userDTO.UserName);
